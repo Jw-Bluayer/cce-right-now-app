@@ -1,10 +1,10 @@
 angular.module('app.services', ['ngCookies', 'ngResource'])
 
 .constant('HostSettings', {
-	host: 'http://127.0.0.1:5000',
-	api: 'http://127.0.0.1:5000/api'
-	// host: 'http://52.34.113.35:5000',
-	// api: 'http://52.34.113.35:5000/api'
+	// host: 'http://127.0.0.1:5000',
+	// api: 'http://127.0.0.1:5000/api'
+	host: 'http://52.34.113.35:5000',
+	api: 'http://52.34.113.35:5000/api'
 })
 
 .config(['$httpProvider', function($httpProvider) {

@@ -60,6 +60,15 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 				}
 			}
 		})
+		.state('app.post', {
+			url: '/post/:postId',
+			views: {
+				'tab-newsfeed': {
+					templateUrl: 'templates/post.html',
+					controller: 'PostCtrl'
+				}
+			}
+		})
 
 		.state('app.now', {
 			url: '/now',

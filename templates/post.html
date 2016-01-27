@@ -1,0 +1,16 @@
+<ion-view view-title="">
+	<ion-content>
+		<div class="list card no-margin">
+			<div class="item">
+				<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
+			</div>
+			<div class="item item-body dark">
+				<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
+				<p>{{post.content}}</p>
+				<p class="text-right">
+					<a href="#" class="subdued" ng-if="post.comments.length">{{post.comments.length+' Comment'+(post.comments.length > 1 ? 's' : '')}}</a>
+				</p>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

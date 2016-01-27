@@ -6,8 +6,8 @@ angular.module('app.controllers', [])
 	// when they are recreated or on app start, instead of every page change.
 	// To listen for when this page is active (for example, to refresh data),
 	// listen for the $ionicView.enter event:
-	//$scope.$on('$ionicView.enter', function(e) {
-	//});
+	// $scope.$on('$ionicView.enter', function(e) {
+	// });
 	
 	$scope.doLogout = function() {
 		AccountService.logoutUser().then(function(res) {
@@ -19,17 +19,19 @@ angular.module('app.controllers', [])
 			} else {
 				$state.go('logNav.login');
 			}
-		})
-	}
+		});
+	};
 })
 
 .controller('LoginCtrl', function($scope, $state, $ionicLoading, $ionicPopup, AccountService) {
-	$ionicLoading.show();
-	AccountService.getUser().then(function(res) {
-		if(res.isAuthenticated) {
-			$state.go('app.newsfeed');
-		}
-		$ionicLoading.hide();
+	$scope.$on('$ionicView.beforeEnter', function(e) {
+		$ionicLoading.show();
+		AccountService.getUser().then(function(res) {
+			if(res.isAuthenticated) {
+				$state.go('app.newsfeed');
+			}
+			$ionicLoading.hide();
+		});
 	});
 
 	// Form data for the login modal
@@ -115,7 +117,7 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $ionicPopup, PostModal, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
 		$scope.user = res;
 	});
@@ -166,4 +168,12 @@ angular.module('app.controllers', [])
 			$scope.$broadcast('scroll.infiniteScrollComplete');
 		});
 	};
+})
+
+.controller('PostCtrl', function($scope, $stateParams, PostAPI) {
+	$scope.$on('$ionicView.beforeEnter', function(e) {
+		PostAPI.get({postId: $stateParams.postId}, function(res) {
+			$scope.post = res;
+		});
+	});
 })
