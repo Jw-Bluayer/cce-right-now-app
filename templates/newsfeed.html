@@ -1,22 +1,17 @@
 <ion-view view-title="Newsfeed">
 	<ion-content>
-		<form class="padding card" ng-submit="doPost()">
-			<div class="list no-margin">
-				<label class="item item-input item-stacked-label">
-					<span class="input-label">What's on your mind, <b>{{user.id}}</b>?</span>
-					<textarea class="no-resize" rows="4" ng-model="postData.content"></textarea>
-				</label>
-				<label class="item text-right" style="padding: 10px;">
-					<button class="button button-small button-icon icon ion-camera"></button>
-					<button class="button button-small button-positive padding-right padding-left">Post</button>
-				</label>
+		<div class="card">
+			<div class="item no-padding">
+				<button class="button button-icon button-full text-left" ng-click="openPostModal()">
+					What's on your mind <b>{{user.id}}</b>?<i class="icon ion-compose right"></i>
+				</button>
 			</div>
-		</form>
+		</div>
 
 		<ion-refresher on-refresh="updateFeed()"></ion-refresher>
 		<ion-list>
 			<ion-item class="no-border" collection-repeat="post in posts | orderBy: '-id'">
-				<div class="list card">
+				<div class="list card no-margin">
 					<div class="item">
 						<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
 					</div>

@@ -115,12 +115,35 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $ionicPopup, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, $ionicPopup, $ionicModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
 		$scope.user = res;
 	});
 
+	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
+		scope: $scope,
+		focusFirstInput: true
+	}).then(function(modal) {
+		$scope.postModal = modal;
+	});
+
+	$scope.openPostModal = function() {
+		$scope.postModal.show();
+	}
+	$scope.closePostModal = function() {
+		$scope.postData = {};
+		$scope.postModal.hide();
+	}
+
 	$scope.postData = {};
+	$scope.addPhoto = function($event) {
+		$event.preventDefault();
+	}
+
+	$scope.addPeople = function($event) {
+		$event.preventDefault();
+	}
+
 	$scope.doPost = function() {
 		if (!$scope.postData.content || $scope.postData.content.length > 120) {
 			$ionicPopup.alert({
@@ -132,7 +155,7 @@ angular.module('app.controllers', [])
 
 		new PostAPI($scope.postData).$save(function(res) {
 			$scope.updateFeed();
-			$scope.postData = {};
+			$scope.closePostModal();
 		}, function(res) {
 			$ionicPopup.alert({
 				title: "Failed to post. Try agin.",
