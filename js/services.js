@@ -89,9 +89,73 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 				return false;
 			});
 		}
-	}
+	};
 })
 
 .factory('PostAPI', function($resource, HostSettings) {
 	return $resource(HostSettings.api+"/post/:postId", {postId: '@postId'});
+})
+
+.service('PostModal', function($ionicModal, $ionicPopup, $rootScope, AccountService, PostAPI) {
+	var $scope = $rootScope.$new();
+
+	AccountService.getUser().then(function(res) {
+		$scope.user = res;
+	});
+
+	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
+		scope: $scope,
+		focusFirstInput: true
+	}).then(function(modal) {
+		$scope.modal = modal;
+	});
+
+	$scope.openModal = function() {
+		$scope.modal.show();
+	};
+	$scope.closeModal = function() {
+		$scope.postData = {};
+		$scope.modal.hide();
+	};
+
+	$scope.feed = undefined;
+	$scope.postData = {};
+	$scope.addPhoto = function($event) {
+		$event.preventDefault();
+	};
+	$scope.addPeople = function($event) {
+		$event.preventDefault();
+	};
+
+	$scope.doPost = function() {
+		if (!$scope.postData.content || $scope.postData.content.length > 120) {
+			$ionicPopup.alert({
+				title: "Content length must be less than or equal to 120!",
+				okType: "assertive"
+			});
+			return;
+		}
+
+		new PostAPI($scope.postData).$save(function(res) {
+			if ($scope.feed) {
+				$scope.feed.update();
+			}
+			$scope.closeModal();
+		}, function(res) {
+			$ionicPopup.alert({
+				title: "Failed to post. Try agin.",
+				okType: "assertive"
+			});
+		})
+	};
+
+	return {
+		openModal: function(feed) {
+			$scope.feed = feed;
+			$scope.openModal();
+		},
+		closeModal: function() {
+			$scope.closeModal();
+		}
+	};
 })

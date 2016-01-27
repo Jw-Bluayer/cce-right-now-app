@@ -115,53 +115,15 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $ionicPopup, $ionicModal, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, $ionicPopup, PostModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
 		$scope.user = res;
 	});
 
-	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
-		scope: $scope,
-		focusFirstInput: true
-	}).then(function(modal) {
-		$scope.postModal = modal;
-	});
-
 	$scope.openPostModal = function() {
-		$scope.postModal.show();
-	}
-	$scope.closePostModal = function() {
-		$scope.postData = {};
-		$scope.postModal.hide();
-	}
-
-	$scope.postData = {};
-	$scope.addPhoto = function($event) {
-		$event.preventDefault();
-	}
-
-	$scope.addPeople = function($event) {
-		$event.preventDefault();
-	}
-
-	$scope.doPost = function() {
-		if (!$scope.postData.content || $scope.postData.content.length > 120) {
-			$ionicPopup.alert({
-				title: "Content length must be less than or equal to 120!",
-				okType: "assertive"
-			});
-			return;
-		}
-
-		new PostAPI($scope.postData).$save(function(res) {
-			$scope.updateFeed();
-			$scope.closePostModal();
-		}, function(res) {
-			$ionicPopup.alert({
-				title: "Failed to post. Try agin.",
-				okType: "assertive"
-			});
-		})
+		PostModal.openModal({
+			update: $scope.updateFeed
+		});
 	};
 
 	$scope.canLoadMoreFeed = true;
