@@ -115,30 +115,15 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $ionicPopup, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, $ionicPopup, PostModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
 		$scope.user = res;
 	});
 
-	$scope.postData = {};
-	$scope.doPost = function() {
-		if (!$scope.postData.content || $scope.postData.content.length > 120) {
-			$ionicPopup.alert({
-				title: "Content length must be less than or equal to 120!",
-				okType: "assertive"
-			});
-			return;
-		}
-
-		new PostAPI($scope.postData).$save(function(res) {
-			$scope.updateFeed();
-			$scope.postData = {};
-		}, function(res) {
-			$ionicPopup.alert({
-				title: "Failed to post. Try agin.",
-				okType: "assertive"
-			});
-		})
+	$scope.openPostModal = function() {
+		PostModal.openModal({
+			update: $scope.updateFeed
+		});
 	};
 
 	$scope.canLoadMoreFeed = true;

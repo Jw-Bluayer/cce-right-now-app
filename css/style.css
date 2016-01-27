@@ -18,3 +18,11 @@
 .list .list:last-child.card {
 	margin-bottom: 0px;
 }
+
+.right {
+	float: right;
+}
+
+.text-left {
+	text-align: left;
+}
