@@ -1,0 +1,18 @@
+<ion-view view-title="Login">
+	<ion-content scroll="false">
+		<form ng-submit="doLogin()">
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="ID" ng-model="loginData.id">
+				</label>
+				<label class="item item-input">
+					<input type="password" placeholder="Password" ng-model="loginData.password">
+				</label>
+				<label class="item">
+					<button class="button button-block button-positive" type="submit">Log in</button>
+				</label>
+				<a class="button button-block button-clear button-positive" href="#/logNav/signup">Or create an Account</a>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

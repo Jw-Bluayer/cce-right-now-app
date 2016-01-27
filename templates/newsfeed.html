@@ -1,0 +1,35 @@
+<ion-view view-title="Newsfeed">
+	<ion-content>
+		<form class="padding card" ng-submit="doPost()">
+			<div class="list no-margin">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">What's on your mind, <b>{{user.id}}</b>?</span>
+					<textarea class="no-resize" rows="4" ng-model="postData.content"></textarea>
+				</label>
+				<label class="item text-right" style="padding: 10px;">
+					<button class="button button-small button-icon icon ion-camera"></button>
+					<button class="button button-small button-positive padding-right padding-left">Post</button>
+				</label>
+			</div>
+		</form>
+
+		<ion-refresher on-refresh="updateFeed()"></ion-refresher>
+		<ion-list>
+			<ion-item class="no-border" collection-repeat="post in posts | orderBy: '-id'">
+				<div class="list card">
+					<div class="item">
+						<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
+					</div>
+					<div class="item item-body dark">
+						<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
+						<p>{{post.content}}</p>
+						<p class="text-right">
+							<a href="#" class="subdued" ng-if="post.comments.length">{{post.comments.length+' Comment'+(post.comments.length > 1 ? 's' : '')}}</a>
+						</p>
+					</div>
+				</div>
+			</ion-item>
+		</ion-list>
+		<ion-infinite-scroll on-infinite="loadMoreFeed()" distance="20%" ng-if="canLoadMoreFeed"></ion-infinite-scroll>
+	</ion-content>
+</ion-view>

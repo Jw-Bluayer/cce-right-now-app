@@ -1,0 +1,47 @@
+<ion-side-menus enable-menu-with-back-views="false">
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-stable">
+			<ion-nav-back-button></ion-nav-back-button>
+
+			<ion-nav-buttons side="left">
+				<button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+			</ion-nav-buttons>
+		</ion-nav-bar>
+
+		<ion-tabs>
+			<ion-tab title="Newsfeed" icon-off="ion-compass" icon-on="ion-compass" href="#/app/newsfeed">
+				<ion-nav-view name="tab-newsfeed"></ion-nav-view>
+			</ion-tab>
+
+			<ion-tab title="Now" icon-off="ion-pound" icon-on="ion-pound" href="#/app/now">
+				<ion-nav-view name="tab-now"></ion-nav-view>
+			</ion-tab>
+
+			<ion-tab title="Notifications" icon-off="ion-android-notifications-none" icon-on="ion-android-notifications" href="#/app/notifications">
+				<ion-nav-view name="tab-notifications"></ion-nav-view>
+			</ion-tab>
+		</ion-tabs>
+	</ion-side-menu-content>
+
+	<ion-side-menu side="left">
+		<ion-header-bar class="bar-stable">
+			<h1 class="title">Left</h1>
+		</ion-header-bar>
+		<ion-content>
+			<ion-list>
+				<ion-item menu-close href="#/app/search">
+					Search
+				</ion-item>
+				<ion-item menu-close href="#/app/browse">
+					Browse
+				</ion-item>
+				<ion-item menu-close href="#/app/playlists">
+					Playlists
+				</ion-item>
+				<ion-item menu-close ng-click="doLogout()">
+					Logout
+				</ion-item>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>
