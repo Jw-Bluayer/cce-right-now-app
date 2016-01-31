@@ -11,7 +11,7 @@
 		<ion-refresher on-refresh="updateFeed()"></ion-refresher>
 		<ion-list>
 			<ion-item class="no-border" collection-repeat="post in posts | orderBy: '-id'">
-				<div class="list card no-margin" ui-sref="app.post({postId: post.id})">
+				<div class="list card no-margin" ui-sref="app.newsfeed-post({postId: post.id})">
 					<div class="item">
 						<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
 					</div>

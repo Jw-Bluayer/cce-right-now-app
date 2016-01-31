@@ -162,7 +162,7 @@ angular.module('app.controllers', [])
 			$scope.posts = $scope.posts.concat(res.objects);
 			if ($scope.posts.length < 1) {
 				$scope.updateFeed();
-			} else if (res.num_results == 0) {
+			} else if (res.num_results == 0 || res.page == res.total_pages) {
 				$scope.canLoadMoreFeed = false;
 			}
 			$scope.$broadcast('scroll.infiniteScrollComplete');
@@ -170,10 +170,85 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('PostCtrl', function($scope, $stateParams, PostAPI) {
+.controller('PostCtrl', function($scope, $stateParams, $ionicPopup, PostAPI) {
+	$scope.commentData = {};
+	$scope.post = {};
 	$scope.$on('$ionicView.beforeEnter', function(e) {
 		PostAPI.get({postId: $stateParams.postId}, function(res) {
 			$scope.post = res;
+			$scope.commentData.post_id = res.id;
 		});
+		$scope.updateComment();
 	});
+
+	$scope.doComment = function() {
+		if (!$scope.commentData.post_id || !$scope.commentData.content) {
+			$ionicPopup.alert({
+				title: "Write some comment before to send!",
+				okType: "assertive"
+			});
+			return;
+		}
+
+		PostAPI.postComment($scope.commentData, function(res) {
+			$scope.commentData.content = undefined;
+			$scope.updateComment();
+		}, function(res) {
+			$ionicPopup.alert({
+				title: "Failed to post. Try agin.",
+				okType: "assertive"
+			});
+		});
+	};
+
+	$scope.updateComment = function() {
+		PostAPI.getComment({
+			q: {
+				filters: [{
+					name: 'post_id',
+					op: '==',
+					val: $stateParams.postId
+				}],
+				order_by: [{
+					field: 'id',
+					direction: 'desc'
+				}]
+			}
+		}, function(res) {
+			$scope.post.comments = res.objects;
+			if (res.num_results == 0 || res.page == res.total_pages) {
+				$scope.canLoadMoreComment = false;
+			} else {
+				$scope.canLoadMoreComment = true;
+			}
+		});
+	};
+
+	$scope.canLoadMoreComment = true;
+	$scope.loadMoreComment = function() {
+		$scope.isLoadingComment = true;
+		PostAPI.getComment({
+			q: {
+				filters: [{
+					name: 'post_id',
+					op: '==',
+					val: $stateParams.postId
+				},{
+					name: 'id',
+					op: '<',
+					val: ($scope.post.comments.length) ? $scope.post.comments[$scope.post.comments.length-1].id : 0
+				}],
+				order_by: [{
+					field: 'id',
+					direction: 'desc'
+				}]
+			}
+		}, function(res) {
+			$scope.post.comments = $scope.post.comments.concat(res.objects);
+			if (res.num_results == 0 || res.page == res.total_pages) {
+				$scope.canLoadMoreComment = false;
+			}
+			$scope.isLoadingComment = false;
+		});
+	}
 })

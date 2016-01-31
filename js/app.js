@@ -60,7 +60,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 				}
 			}
 		})
-		.state('app.post', {
+		.state('app.newsfeed-post', {
 			url: '/post/:postId',
 			views: {
 				'tab-newsfeed': {
@@ -78,6 +78,15 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 				}
 			}
 		})
+		.state('app.now-post', {
+			url: '/post/:postId',
+			views: {
+				'tab-now': {
+					templateUrl: 'templates/post.html',
+					controller: 'PostCtrl'
+				}
+			}
+		})
 
 		.state('app.notifications', {
 			url: '/notifications',
@@ -86,7 +95,16 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 					templateUrl: 'templates/notifications.html'
 				}
 			}
-		});
+		})
+		.state('app.notifications-post', {
+			url: '/post/:postId',
+			views: {
+				'tab-notifications': {
+					templateUrl: 'templates/post.html',
+					controller: 'PostCtrl'
+				}
+			}
+		})
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/logNav/login');

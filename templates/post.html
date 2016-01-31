@@ -12,5 +12,24 @@
 				</p>
 			</div>
 		</div>
+		<div class="item item-divider"></div>
+		<ion-list class="dark">
+			<ion-item class="item-divider" ng-if="canLoadMoreComment && !isLoadingComment" ng-click="loadMoreComment()">Load more...</ion-item>
+			<ion-item class="item-divider" ng-if="isLoadingComment">Loading comments...</ion-item>
+			<ion-item collection-repeat="comment in post.comments | orderBy: 'id'">
+				<p><b>{{comment.cmter.id}}</b><span style="color: #666;"> {{comment.ago+(comment.ago != 'Just now' ? ' ago' : '')}}</span></p>
+				<p>{{comment.content}}</p>
+			</ion-item>
+		</ion-list>
 	</ion-content>
+	<form ng-submit="doComment()">
+		<ion-footer-bar class="item-input-inset bar-stable">
+				<label class="item-input-wrapper">
+					<input type="text" placeholder="Comment.." ng-model="commentData.content" required>
+				</label>
+				<button class="button button-small button-clear">
+					Post
+				</button>
+		</ion-footer-bar>
+	</form>
 </ion-view>

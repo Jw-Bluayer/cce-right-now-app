@@ -1,10 +1,10 @@
 angular.module('app.services', ['ngCookies', 'ngResource'])
 
 .constant('HostSettings', {
-	// host: 'http://127.0.0.1:5000',
-	// api: 'http://127.0.0.1:5000/api'
-	host: 'http://52.34.113.35:5000',
-	api: 'http://52.34.113.35:5000/api'
+	host: 'http://127.0.0.1:5000',
+	api: 'http://127.0.0.1:5000/api'
+	// host: 'http://52.34.113.35:5000',
+	// api: 'http://52.34.113.35:5000/api'
 })
 
 .config(['$httpProvider', function($httpProvider) {
@@ -93,7 +93,17 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 })
 
 .factory('PostAPI', function($resource, HostSettings) {
-	return $resource(HostSettings.api+"/post/:postId", {postId: '@postId'});
+	return $resource(HostSettings.api+"/post/:postId", {postId: '@postId'}, {
+		'getComment': {
+			method: 'GET',
+			url: HostSettings.api+"/comment",
+			params: {q: '@q'}
+		},
+		'postComment': {
+			method: 'POST',
+			url: HostSettings.api+"/comment"
+		}
+	});
 })
 
 .service('PostModal', function($ionicModal, $ionicPopup, $rootScope, AccountService, PostAPI) {
@@ -146,7 +156,7 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 				title: "Failed to post. Try agin.",
 				okType: "assertive"
 			});
-		})
+		});
 	};
 
 	return {
