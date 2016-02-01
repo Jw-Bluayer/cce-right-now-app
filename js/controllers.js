@@ -117,7 +117,7 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, WhoAreYouActionSheet, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
 		$scope.user = res;
 	});
@@ -169,19 +169,55 @@ angular.module('app.controllers', [])
 		});
 	};
 
-	$scope.showActionSheet = function(opId) {
-		WhoAreYouActionSheet.showActionSheet(opId);
-	};
-})
-
-.controller('PostCtrl', function($scope, $stateParams, PostAPI, WhoAreYouActionSheet) {
+.controller('PostCtrl', function($scope, $stateParams, $ionicPopup, PostAPI) {
+	$scope.commentData = {};
+	$scope.post = {};
 	$scope.$on('$ionicView.beforeEnter', function(e) {
 		PostAPI.get({postId: $stateParams.postId}, function(res) {
 			$scope.post = res;
 		});
 	});
 
-	$scope.showActionSheet = function(opId) {
-		WhoAreYouActionSheet.showActionSheet(opId);
+	$scope.doComment = function() {
+		if (!$scope.commentData.post_id || !$scope.commentData.content) {
+			$ionicPopup.alert({
+				title: "Write some comment before to send!",
+				okType: "assertive"
+			});
+			return;
+		}
+
+		PostAPI.postComment($scope.commentData, function(res) {
+			$scope.commentData.content = undefined;
+			$scope.updateComment();
+		}, function(res) {
+			$ionicPopup.alert({
+				title: "Failed to post. Try agin.",
+				okType: "assertive"
+			});
+		});
+	};
+
+	$scope.updateComment = function() {
+		PostAPI.getComment({
+			q: {
+				filters: [{
+					name: 'post_id',
+					op: '==',
+					val: $stateParams.postId
+				}],
+				order_by: [{
+					field: 'id',
+					direction: 'desc'
+				}]
+			}
+		}, function(res) {
+			$scope.post.comments = res.objects;
+			if (res.num_results == 0 || res.page == res.total_pages) {
+				$scope.canLoadMoreComment = false;
+			} else {
+				$scope.canLoadMoreComment = true;
+			}
+		});
 	};
 })
