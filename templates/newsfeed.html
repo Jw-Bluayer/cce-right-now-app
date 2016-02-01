@@ -19,6 +19,7 @@
 						<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
 						<p>{{post.content}}</p>
 						<p class="text-right">
+							　<!-- Blank character for space -->
 							<a href="#" class="subdued" ng-if="post.comments.length">{{post.comments.length+' Comment'+(post.comments.length > 1 ? 's' : '')}}</a>
 						</p>
 					</div>

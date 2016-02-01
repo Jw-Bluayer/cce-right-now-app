@@ -117,9 +117,10 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, AccountService, PostAPI) {
-	AccountService.getUser().then(function(res) {
-		$scope.user = AccountService.currentUser;
+.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, AccountService, PostAPI, WhoAreYouActionSheet) {
+	AccountService.watchCurrentUser(function(user) {
+		$scope.user = user;
+		$scope.updateFeed();
 	});
 
 	$scope.openPostModal = function() {
@@ -168,16 +169,29 @@ angular.module('app.controllers', [])
 			$scope.$broadcast('scroll.infiniteScrollComplete');
 		});
 	};
+
+	$scope.showActionSheet = function(id) {
+		WhoAreYouActionSheet.showActionSheet(id);
+	};
 })
 
-.controller('NotificationsCtrl', function($scope, NotificationAPI) {
-	$scope.notifications = [];
-	NotificationAPI.get(function(res) {
-		$scope.notifications = res.objects;
+.controller('NotificationsCtrl', function($scope, AccountService, NotificationAPI) {
+	AccountService.watchCurrentUser(function(user) {
+		$scope.updateNotifications();
 	});
+
+	$scope.notifications = [];
+
+	$scope.updateNotifications = function() {
+		NotificationAPI.get(function(res) {
+			$scope.notifications = res.objects;
+		});
+	};
+
+	$scope.updateNotifications();
 })
 
-.controller('PostCtrl', function($scope, $stateParams, $ionicPopup, PostAPI) {
+.controller('PostCtrl', function($scope, $stateParams, $ionicPopup, WhoAreYouActionSheet, PostAPI) {
 	$scope.commentData = {};
 	$scope.post = {};
 	$scope.$on('$ionicView.beforeEnter', function(e) {
@@ -257,5 +271,9 @@ angular.module('app.controllers', [])
 			}
 			$scope.isLoadingComment = false;
 		});
-	}
+	};
+
+	$scope.showActionSheet = function(id) {
+		WhoAreYouActionSheet.showActionSheet(id);
+	};
 })

@@ -44,12 +44,17 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
   $httpProvider.interceptors.push('myCSRF');
 })
 
-.service('AccountService', function($http, $timeout, HostSettings) {
+.service('AccountService', function($rootScope, $http, $timeout, HostSettings) {
+	var $scope = $rootScope.$new();
+	$scope.currentUser = {};
+
 	return {
 		host: HostSettings.host,
 		getUser: function() {
+			$this = this;
 			return $http.get(this.host+'/current-user').then(function(res) {
 				if (res.status == 200 && res.data.isAuthenticated && res.data.id && res.data.name) {
+					$scope.currentUser = res.data;
 					return res.data;
 				} else {
 					return {isAuthenticated: false};
@@ -89,6 +94,9 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 				return false;
 			});
 		},
+		watchCurrentUser: function(callback) {
+			$scope.$watch("currentUser", callback);
+		},
 		requestPersonalAuth: function(userid) {
 			console.log("requestPersonalAuth called!", userid);
 		}
@@ -109,11 +117,22 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 	});
 })
 
+.factory('NotificationAPI', function($resource, HostSettings) {
+	return $resource(HostSettings.api+"/notification", {
+		q: {
+			order_by: [{
+				field: 'id',
+				direction: 'desc'
+			}]
+		}
+	});
+})
+
 .service('PostModal', function($ionicModal, $ionicPopup, $rootScope, AccountService, PostAPI) {
 	var $scope = $rootScope.$new();
 
-	AccountService.getUser().then(function(res) {
-		$scope.user = res;
+	AccountService.watchCurrentUser(function(user) {
+		$scope.user = user;
 	});
 
 	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
