@@ -117,9 +117,9 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('NewsfeedCtrl', function($scope, $state, $ionicPopup, PostModal, AccountService, PostAPI) {
+.controller('NewsfeedCtrl', function($scope, PostModal, AccountService, PostAPI) {
 	AccountService.getUser().then(function(res) {
-		$scope.user = res;
+		$scope.user = AccountService.currentUser;
 	});
 
 	$scope.openPostModal = function() {
@@ -170,6 +170,13 @@ angular.module('app.controllers', [])
 	};
 })
 
+.controller('NotificationsCtrl', function($scope, NotificationAPI) {
+	$scope.notifications = [];
+	NotificationAPI.get(function(res) {
+		$scope.notifications = res.objects;
+	});
+})
+
 .controller('PostCtrl', function($scope, $stateParams, $ionicPopup, PostAPI) {
 	$scope.commentData = {};
 	$scope.post = {};
@@ -193,6 +200,7 @@ angular.module('app.controllers', [])
 		PostAPI.postComment($scope.commentData, function(res) {
 			$scope.commentData.content = undefined;
 			$scope.updateComment();
+			console.log(res);
 		}, function(res) {
 			$ionicPopup.alert({
 				title: "Failed to post. Try agin.",

@@ -92,7 +92,8 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 			url: '/notifications',
 			views: {
 				'tab-notifications': {
-					templateUrl: 'templates/notifications.html'
+					templateUrl: 'templates/notifications.html',
+					controller: 'NotificationsCtrl'
 				}
 			}
 		})

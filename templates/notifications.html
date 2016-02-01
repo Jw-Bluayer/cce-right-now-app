@@ -1,29 +1,9 @@
 <ion-view view-title="Notifications">
 	<ion-content>
 		<ion-list>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
-			</ion-item>
-			<ion-item>
-				Notification
+			<ion-item ng-if="notifications.length < 1">No notifications.</ion-item>
+			<ion-item collection-repeat="noti in notifications">
+				{{noti.to}}
 			</ion-item>
 		</ion-list>
 	</ion-content>

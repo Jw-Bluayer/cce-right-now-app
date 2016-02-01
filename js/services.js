@@ -47,9 +47,12 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 .service('AccountService', function($http, $timeout, HostSettings) {
 	return {
 		host: HostSettings.host,
+		currentUser: {},
 		getUser: function() {
+			$this = this;
 			return $http.get(this.host+'/current-user').then(function(res) {
 				if (res.status == 200 && res.data.isAuthenticated && res.data.id && res.data.name) {
+					$this.currentUser = res.data;
 					return res.data;
 				} else {
 					return {isAuthenticated: false};
@@ -106,11 +109,22 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 	});
 })
 
+.factory('NotificationAPI', function($resource, HostSettings) {
+	return $resource(HostSettings.api+"/notification", {
+		q: {
+			order_by: [{
+				'field': 'id',
+				'directions': 'desc'
+			}]
+		}
+	});
+})
+
 .service('PostModal', function($ionicModal, $ionicPopup, $rootScope, AccountService, PostAPI) {
 	var $scope = $rootScope.$new();
 
 	AccountService.getUser().then(function(res) {
-		$scope.user = res;
+		$scope.user = AccountService.currentUser;
 	});
 
 	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
@@ -122,6 +136,8 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 
 	$scope.openModal = function() {
 		$scope.modal.show();
+		console.log("A", AccountService.currentUser);
+		console.log("S", $scope.user);
 	};
 	$scope.closeModal = function() {
 		$scope.postData = {};
