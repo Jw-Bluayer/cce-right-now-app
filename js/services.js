@@ -91,6 +91,9 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 			}, function(res) {
 				return false;
 			});
+		},
+		requestPersonalAuth: function(userid) {
+			console.log("requestPersonalAuth called!", userid);
 		}
 	};
 })
@@ -184,4 +187,34 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 			$scope.closeModal();
 		}
 	};
+})
+
+.service('WhoAreYouActionSheet', function($ionicActionSheet, $rootScope, AccountService) {
+	var $scope = $rootScope.$new();
+	
+	$scope.showActionSheet = function(opId) {
+		$ionicActionSheet.show({
+			buttons: [{
+				text: 'Who are you'
+			}, {
+				text: 'Cancel'
+			}],
+			titleText: '@'+opId,
+			buttonClicked: function(index, buttonObj) {
+				switch (index) {
+					case 0:
+						AccountService.requestPersonalAuth(opId);
+						return true;
+					case 1:
+						return true;
+				}
+			}
+		});
+	};
+
+	return {
+		showActionSheet: function(opId) {
+			$scope.showActionSheet(opId);
+		}
+	}
 })

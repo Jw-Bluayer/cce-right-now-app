@@ -2,7 +2,7 @@
 	<ion-content>
 		<div class="list card no-margin">
 			<div class="item">
-				<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
+				<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b ng-click="showActionSheet(post.op.id); $event.stopPropagation();">@{{post.op.id}}</b></div>
 			</div>
 			<div class="item item-body dark">
 				<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
@@ -17,7 +17,7 @@
 			<ion-item class="item-divider" ng-if="canLoadMoreComment && !isLoadingComment" ng-click="loadMoreComment()">Load more...</ion-item>
 			<ion-item class="item-divider" ng-if="isLoadingComment">Loading comments...</ion-item>
 			<ion-item collection-repeat="comment in post.comments | orderBy: 'id'">
-				<p><b>{{comment.cmter.id}}</b><span style="color: #666;"> {{comment.ago+(comment.ago != 'Just now' ? ' ago' : '')}}</span></p>
+				<p><b ng-click="showActionSheet(comment.cmter.id); $event.stopPropagation();">{{comment.cmter.id}}</b><span style="color: #666;"> {{comment.ago+(comment.ago != 'Just now' ? ' ago' : '')}}</span></p>
 				<p>{{comment.content}}</p>
 			</ion-item>
 		</ion-list>
