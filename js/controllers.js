@@ -185,10 +185,24 @@ angular.module('app.controllers', [])
 	$scope.updateNotifications = function() {
 		NotificationAPI.get(function(res) {
 			$scope.notifications = res.objects;
+			$scope.createNotificationContents();
+			console.log($scope.notifications);
 		});
 	};
-
-	$scope.updateNotifications();
+	$scope.createNotificationContents = function() {
+		for (var i = 0; i < $scope.notifications.length; i++) {
+			var noti = $scope.notifications[i];
+			switch(noti.type) {
+				case "CommentTagNotification":
+					noti.content = "<b>@"+noti.who+"</b> mentioned you in a comment.";
+					break;
+			}
+		};
+	};
+	$scope.notificationClicked = function(notiObj) {
+		// NotificationEngine.inListClicked(notiObj);
+		console.log(notiObj);
+	};
 })
 
 .controller('PostCtrl', function($scope, $stateParams, $ionicPopup, WhoAreYouActionSheet, PostAPI) {

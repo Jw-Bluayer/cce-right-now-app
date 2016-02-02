@@ -26,3 +26,7 @@
 .text-left {
 	text-align: left;
 }
+
+.font-black {
+	color: black !important;
+}
