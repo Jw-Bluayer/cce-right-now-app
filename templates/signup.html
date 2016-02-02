@@ -1,18 +1,18 @@
-<ion-view view-title="Signup">
+<ion-view view-title="{{'SIGNUP_TITLE' | translate}}">
 	<ion-content scroll="false">
 		<form ng-submit="doSignup()">
 			<div class="list">
 				<label class="item item-input">
-					<input type="text" placeholder="ID" ng-model="signupData.id">
+					<input type="text" placeholder="{{'ID' | translate}}" ng-model="signupData.id">
 				</label>
 				<label class="item item-input">
-					<input type="text" placeholder="Name" ng-model="signupData.name">
+					<input type="text" placeholder="{{'NAME' | translate}}" ng-model="signupData.name">
 				</label>
 				<label class="item item-input">
-					<input type="password" placeholder="Password" ng-model="signupData.password">
+					<input type="password" placeholder="{{'PASSWORD' | translate}}" ng-model="signupData.password">
 				</label>
 				<label class="item">
-					<button class="button button-block button-positive" type="submit">Sign up</button>
+					<button class="button button-block button-positive" type="submit">{{'SIGNUP' | translate}}</button>
 				</label>
 			</div>
 		</form>

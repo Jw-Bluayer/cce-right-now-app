@@ -1,4 +1,4 @@
-angular.module('app', ['ionic', 'app.controllers', 'app.services'])
+angular.module('app', ['ionic','pascalprecht.translate','app.controllers','app.services'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
@@ -109,4 +109,12 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/logNav/login');
-});
+})
+
+.config(['$translateProvider', function ($translateProvider) {
+	$translateProvider.useStaticFilesLoader({
+		prefix: '/locale/locale-',
+		suffix: '.json'
+	});
+	$translateProvider.preferredLanguage('en');
+}]);

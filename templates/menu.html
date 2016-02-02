@@ -29,14 +29,11 @@
 		</ion-header-bar>
 		<ion-content>
 			<ion-list>
-				<ion-item menu-close href="#/app/search">
-					Search
+				<ion-item menu-close ng-click="changeLanguage('ko')">
+					한국어
 				</ion-item>
-				<ion-item menu-close href="#/app/browse">
-					Browse
-				</ion-item>
-				<ion-item menu-close href="#/app/playlists">
-					Playlists
+				<ion-item menu-close ng-click="changeLanguage('en')">
+					English
 				</ion-item>
 				<ion-item menu-close ng-click="doLogout()">
 					Logout

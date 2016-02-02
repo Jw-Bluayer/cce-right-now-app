@@ -1,9 +1,9 @@
-<ion-view view-title="Newsfeed">
+<ion-view view-title="{{'NEWSFEED_TITLE' | translate}}">
 	<ion-content>
 		<div class="card">
 			<div class="item no-padding">
 				<button class="button button-icon button-full text-left" ng-click="openPostModal()">
-					What's on your mind <b>{{user.id}}</b>?<i class="icon ion-compose right"></i>
+					<span ng-bind-html="'WHATS_ON_YOUR_MIND' | translate:user"></span><i class="icon ion-compose right"></i>
 				</button>
 			</div>
 		</div>

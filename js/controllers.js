@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 
-.controller('AppCtrl', function($scope, $state, $ionicPopup, AccountService) {
+.controller('AppCtrl', function($scope, $state, $translate, $ionicPopup, AccountService) {
 
 	// With the new view caching in Ionic, Controllers are only called
 	// when they are recreated or on app start, instead of every page change.
@@ -21,9 +21,13 @@ angular.module('app.controllers', [])
 			}
 		});
 	};
+
+	$scope.changeLanguage = function(langKey) {
+		$translate.use(langKey);
+	};
 })
 
-.controller('LoginCtrl', function($scope, $state, $ionicLoading, $ionicPopup, AccountService) {
+.controller('LoginCtrl', function($scope, $state, $translate, $ionicLoading, $ionicPopup, AccountService) {
 	$scope.$on('$ionicView.beforeEnter', function(e) {
 		$ionicLoading.show();
 		AccountService.getUser().then(function(res) {
@@ -34,6 +38,10 @@ angular.module('app.controllers', [])
 		});
 	});
 
+	$translate(['ENTER_ID','ENTER_PASSWORD','INCORRECT_PASSWORD']).then(function(translations) {
+		$scope.i = translations;
+	});
+
 	// Form data for the login modal
 	$scope.loginData = {};
 
@@ -42,14 +50,14 @@ angular.module('app.controllers', [])
 		// Validation
 		if (!$scope.loginData.id) {
 			$ionicPopup.alert({
-				title: "Enter your ID",
+				title: $scope.i.ENTER_ID,
 				okType: "assertive"
 			});
 			return;
 		}
 		if (!$scope.loginData.password) {
 			$ionicPopup.alert({
-				title: "Enter your password",
+				title: $scope.i.ENTER_PASSWORD,
 				okType: "assertive"
 			});
 			return;
@@ -65,7 +73,7 @@ angular.module('app.controllers', [])
 			} else {
 				$ionicLoading.hide();
 				$ionicPopup.alert({
-					title: "The password you entered is incorrect.",
+					title: $scope.i.INCORRECT_PASSWORD,
 					okType: "assertive"
 				});
 			}
@@ -73,28 +81,31 @@ angular.module('app.controllers', [])
 	};
 })
 
-.controller('SignupCtrl', function($scope, $state, $ionicLoading, $ionicPopup, AccountService) {
-	$scope.signupData = {};
+.controller('SignupCtrl', function($scope, $state, $translate, $ionicLoading, $ionicPopup, AccountService) {
+	$translate(['ENTER_ID','ENTER_PASSWORD','ENTER_NAME','ID_EXISTS']).then(function(translations) {
+		$scope.i = translations;
+	});
 
+	$scope.signupData = {};
 	$scope.doSignup = function() {
 		// Validation
 		if (!$scope.signupData.id) {
 			$ionicPopup.alert({
-				title: "Enter your ID",
+				title: $scope.i.ENTER_ID,
 				okType: "assertive"
 			});
 			return;
 		}
 		if (!$scope.signupData.name) {
 			$ionicPopup.alert({
-				title: "Enter your name",
+				title: $scope.i.ENTER_NAME,
 				okType: "assertive"
 			});
 			return;
 		}
 		if (!$scope.signupData.password) {
 			$ionicPopup.alert({
-				title: "Enter your password",
+				title: $scope.i.ENTER_PASSWORD,
 				okType: "assertive"
 			});
 			return;
@@ -109,7 +120,7 @@ angular.module('app.controllers', [])
 			} else {
 				$ionicLoading.hide();
 				$ionicPopup.alert({
-					title: "The ID already exists.",
+					title: $scope.i.ID_EXISTS,
 					okType: "assertive"
 				});
 			}
