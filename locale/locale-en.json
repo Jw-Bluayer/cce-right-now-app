@@ -1,0 +1,20 @@
+{
+
+	"LOGIN_TITLE": "Login",
+	"SIGNUP_TITLE": "Signup",
+	"ID": "ID",
+	"PASSWORD": "Password",
+	"NAME": "Name",
+	"LOGIN": "Log in",
+	"CREATE_ACCOUNT": "Or create an Account",
+	"SIGNUP": "Sign up",
+	"ENTER_ID": "Enter your ID",
+	"ENTER_PASSWORD": "Enter your password",
+	"ENTER_NAME": "Enter your name",
+	"INCORRECT_PASSWORD": "The password you entered is incorrect.",
+	"ID_EXISTS": "The ID already exists.",
+	
+	"NEWSFEED_TITLE": "Newsfeed",
+	"WHATS_ON_YOUR_MIND": "What's on your mind <b>{{id}}</b>?"
+
+}

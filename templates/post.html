@@ -2,15 +2,34 @@
 	<ion-content>
 		<div class="list card no-margin">
 			<div class="item">
-				<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
+				<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b class="font-black" ng-click="showActionSheet(post.op.id); $event.stopPropagation();">@{{post.op.id}}</b></div>
 			</div>
 			<div class="item item-body dark">
 				<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
-				<p>{{post.content}}</p>
+				<p class="font-black">{{post.content}}</p>
 				<p class="text-right">
 					<a href="#" class="subdued" ng-if="post.comments.length">{{post.comments.length+' Comment'+(post.comments.length > 1 ? 's' : '')}}</a>
 				</p>
 			</div>
 		</div>
+		<div class="item item-divider"></div>
+		<ion-list class="dark">
+			<ion-item class="item-divider" ng-if="canLoadMoreComment && !isLoadingComment" ng-click="loadMoreComment()">Load more...</ion-item>
+			<ion-item class="item-divider" ng-if="isLoadingComment">Loading comments...</ion-item>
+			<ion-item collection-repeat="comment in post.comments | orderBy: 'id'">
+				<p><b class="font-black" ng-click="showActionSheet(comment.cmter.id); $event.stopPropagation();">{{comment.cmter.id}}</b><span style="color: #666;"> {{comment.ago+(comment.ago != 'Just now' ? ' ago' : '')}}</span></p>
+				<p class="font-black">{{comment.content}}</p>
+			</ion-item>
+		</ion-list>
 	</ion-content>
+	<form ng-submit="doComment()">
+		<ion-footer-bar class="item-input-inset bar-stable">
+				<label class="item-input-wrapper">
+					<input type="text" placeholder="Comment.." ng-model="commentData.content" required>
+				</label>
+				<button class="button button-small button-clear">
+					Post
+				</button>
+		</ion-footer-bar>
+	</form>
 </ion-view>

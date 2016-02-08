@@ -1,10 +1,10 @@
 angular.module('app.services', ['ngCookies', 'ngResource'])
 
 .constant('HostSettings', {
-	// host: 'http://127.0.0.1:5000',
-	// api: 'http://127.0.0.1:5000/api'
-	host: 'http://52.34.113.35:5000',
-	api: 'http://52.34.113.35:5000/api'
+	host: 'http://127.0.0.1:5000',
+	api: 'http://127.0.0.1:5000/api'
+	// host: 'http://52.34.113.35:5000',
+	// api: 'http://52.34.113.35:5000/api'
 })
 
 .config(['$httpProvider', function($httpProvider) {
@@ -44,12 +44,17 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
   $httpProvider.interceptors.push('myCSRF');
 })
 
-.service('AccountService', function($http, $timeout, HostSettings) {
+.service('AccountService', function($rootScope, $http, $timeout, HostSettings) {
+	var $scope = $rootScope.$new();
+	$scope.currentUser = {};
+
 	return {
 		host: HostSettings.host,
 		getUser: function() {
+			$this = this;
 			return $http.get(this.host+'/current-user').then(function(res) {
 				if (res.status == 200 && res.data.isAuthenticated && res.data.id && res.data.name) {
+					$scope.currentUser = res.data;
 					return res.data;
 				} else {
 					return {isAuthenticated: false};
@@ -88,19 +93,46 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 			}, function(res) {
 				return false;
 			});
+		},
+		watchCurrentUser: function(callback) {
+			$scope.$watch("currentUser", callback);
+		},
+		requestPersonalAuth: function(userid) {
+			console.log("requestPersonalAuth called!", userid);
 		}
 	};
 })
 
 .factory('PostAPI', function($resource, HostSettings) {
-	return $resource(HostSettings.api+"/post/:postId", {postId: '@postId'});
+	return $resource(HostSettings.api+"/post/:postId", {postId: '@postId'}, {
+		'getComment': {
+			method: 'GET',
+			url: HostSettings.api+"/comment",
+			params: {q: '@q'}
+		},
+		'postComment': {
+			method: 'POST',
+			url: HostSettings.api+"/comment"
+		}
+	});
+})
+
+.factory('NotificationAPI', function($resource, HostSettings) {
+	return $resource(HostSettings.api+"/notification", {
+		q: {
+			order_by: [{
+				field: 'id',
+				direction: 'desc'
+			}]
+		}
+	});
 })
 
 .service('PostModal', function($ionicModal, $ionicPopup, $rootScope, AccountService, PostAPI) {
 	var $scope = $rootScope.$new();
 
-	AccountService.getUser().then(function(res) {
-		$scope.user = res;
+	AccountService.watchCurrentUser(function(user) {
+		$scope.user = user;
 	});
 
 	$ionicModal.fromTemplateUrl('templates/post-modal.html', {
@@ -146,7 +178,7 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 				title: "Failed to post. Try agin.",
 				okType: "assertive"
 			});
-		})
+		});
 	};
 
 	return {
@@ -158,4 +190,34 @@ angular.module('app.services', ['ngCookies', 'ngResource'])
 			$scope.closeModal();
 		}
 	};
+})
+
+.service('WhoAreYouActionSheet', function($ionicActionSheet, $rootScope, AccountService) {
+	var $scope = $rootScope.$new();
+	
+	$scope.showActionSheet = function(opId) {
+		$ionicActionSheet.show({
+			buttons: [{
+				text: 'Who are you'
+			}, {
+				text: 'Cancel'
+			}],
+			titleText: '@'+opId,
+			buttonClicked: function(index, buttonObj) {
+				switch (index) {
+					case 0:
+						AccountService.requestPersonalAuth(opId);
+						return true;
+					case 1:
+						return true;
+				}
+			}
+		});
+	};
+
+	return {
+		showActionSheet: function(opId) {
+			$scope.showActionSheet(opId);
+		}
+	}
 })

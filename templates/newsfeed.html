@@ -1,9 +1,9 @@
-<ion-view view-title="Newsfeed">
+<ion-view view-title="{{'NEWSFEED_TITLE' | translate}}">
 	<ion-content>
 		<div class="card">
 			<div class="item no-padding">
 				<button class="button button-icon button-full text-left" ng-click="openPostModal()">
-					What's on your mind <b>{{user.id}}</b>?<i class="icon ion-compose right"></i>
+					<span ng-bind-html="'WHATS_ON_YOUR_MIND' | translate:user"></span><i class="icon ion-compose right"></i>
 				</button>
 			</div>
 		</div>
@@ -11,14 +11,15 @@
 		<ion-refresher on-refresh="updateFeed()"></ion-refresher>
 		<ion-list>
 			<ion-item class="no-border" collection-repeat="post in posts | orderBy: '-id'">
-				<div class="list card no-margin" ui-sref="app.post({postId: post.id})">
+				<div class="list card no-margin" ui-sref="app.newsfeed-post({postId: post.id})">
 					<div class="item">
-						<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b>@{{post.op.id}}</b></div>
+						<div><b class="assertive" ng-if="post.now">NOW! </b><span style="color: #666;">{{post.ago+(post.ago != 'Just now' ? ' ago' : '')}} </span><b class="font-black" ng-click="showActionSheet(post.op.id); $event.stopPropagation();">@{{post.op.id}}</b></div>
 					</div>
 					<div class="item item-body dark">
 						<img class="full-image" ng-attr-src="{{post.hasImage ? post.image : ''}}" ng-if="post.hasImage">
-						<p>{{post.content}}</p>
+						<p class="font-black">{{post.content}}</p>
 						<p class="text-right">
+							　<!-- Blank character for space -->
 							<a href="#" class="subdued" ng-if="post.comments.length">{{post.comments.length+' Comment'+(post.comments.length > 1 ? 's' : '')}}</a>
 						</p>
 					</div>

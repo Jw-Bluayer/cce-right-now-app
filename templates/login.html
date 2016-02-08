@@ -1,17 +1,17 @@
-<ion-view view-title="Login">
+<ion-view view-title="{{'LOGIN_TITLE' | translate}}">
 	<ion-content scroll="false">
 		<form ng-submit="doLogin()">
 			<div class="list">
 				<label class="item item-input">
-					<input type="text" placeholder="ID" ng-model="loginData.id">
+					<input type="text" placeholder="{{'ID' | translate}}" ng-model="loginData.id">
 				</label>
 				<label class="item item-input">
-					<input type="password" placeholder="Password" ng-model="loginData.password">
+					<input type="password" placeholder="{{'PASSWORD' | translate}}" ng-model="loginData.password">
 				</label>
 				<label class="item">
-					<button class="button button-block button-positive" type="submit">Log in</button>
+					<button class="button button-block button-positive" type="submit">{{'LOGIN' | translate}}</button>
 				</label>
-				<a class="button button-block button-clear button-positive" href="#/logNav/signup">Or create an Account</a>
+				<a class="button button-block button-clear button-positive" href="#/logNav/signup">{{'CREATE_ACCOUNT' | translate}}</a>
 			</div>
 		</form>
 	</ion-content>

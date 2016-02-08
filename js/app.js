@@ -1,4 +1,4 @@
-angular.module('app', ['ionic', 'app.controllers', 'app.services'])
+angular.module('app', ['ionic','pascalprecht.translate','app.controllers','app.services'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
@@ -60,7 +60,7 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 				}
 			}
 		})
-		.state('app.post', {
+		.state('app.newsfeed-post', {
 			url: '/post/:postId',
 			views: {
 				'tab-newsfeed': {
@@ -78,16 +78,43 @@ angular.module('app', ['ionic', 'app.controllers', 'app.services'])
 				}
 			}
 		})
+		.state('app.now-post', {
+			url: '/post/:postId',
+			views: {
+				'tab-now': {
+					templateUrl: 'templates/post.html',
+					controller: 'PostCtrl'
+				}
+			}
+		})
 
 		.state('app.notifications', {
 			url: '/notifications',
 			views: {
 				'tab-notifications': {
-					templateUrl: 'templates/notifications.html'
+					templateUrl: 'templates/notifications.html',
+					controller: 'NotificationsCtrl'
 				}
 			}
-		});
+		})
+		.state('app.notifications-post', {
+			url: '/post/:postId',
+			views: {
+				'tab-notifications': {
+					templateUrl: 'templates/post.html',
+					controller: 'PostCtrl'
+				}
+			}
+		})
 
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/logNav/login');
-});
+})
+
+.config(['$translateProvider', function ($translateProvider) {
+	$translateProvider.useStaticFilesLoader({
+		prefix: '/locale/locale-',
+		suffix: '.json'
+	});
+	$translateProvider.preferredLanguage('en');
+}]);

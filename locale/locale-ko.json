@@ -1,0 +1,20 @@
+{
+
+	"LOGIN_TITLE": "로그인",
+	"SIGNUP_TITLE": "가입",
+	"ID": "아이디",
+	"PASSWORD": "비밀번호",
+	"NAME": "이름",
+	"LOGIN": "로그인",
+	"CREATE_ACCOUNT": "가입",
+	"SIGNUP": "가입",
+	"ENTER_ID": "아이디를 입력하세요",
+	"ENTER_PASSWORD": "비밀번호를 입력하세요",
+	"ENTER_NAME": "이름을 입력하세요",
+	"INCORRECT_PASSWORD": "비밀번호가 다릅니다.",
+	"ID_EXISTS": "이미 사용되는 아이디입니다.",
+	
+	"NEWSFEED_TITLE": "뉴스피드",
+	"WHATS_ON_YOUR_MIND": "무슨 생각을 하고 있나요 <b>{{id}}</b>?"
+
+}
